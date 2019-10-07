@@ -22,4 +22,21 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
     returned.**/
     Iterator<E>descendingIterator ();
 
+    /**
+     @precondition
+     @postcondition
+     **/
+    boolean insert();
+
+    /**
+     @precondition
+     @postcondition
+     **/
+    boolean delete();
+
+    /**
+     @precondition
+     @postcondition
+     **/
+    boolean find();
 }
