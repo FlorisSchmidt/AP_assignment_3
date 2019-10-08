@@ -1,7 +1,7 @@
 package assignment3;
 
 import java.util.ArrayList;
-import java.util.Iterator<E>;
+import java.util.Iterator;
 
 public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
 
@@ -24,9 +24,21 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
 
     @Override
     public Iterator<E> ascendingIterator() {
-        // turn BST into ascending Arraylist
-        return  null;
+        ArrayList<E> iterator = new ArrayList<E>();
+        recursiveTraverse(this.root, iterator);
+        return iterator.iterator();
     }
+
+    private void recursiveTraverse(Node root, ArrayList<E> iterator) {
+        if (root != null) {
+            recursiveTraverse(root.left, iterator);
+            System.out.println(root.value);
+            recursiveTraverse(root.right, iterator);
+        }
+        assert root != null;
+        iterator.add(root.value);
+    }
+
 
     @Override
     public Iterator<E> descendingIterator() {
@@ -41,7 +53,7 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     }
 
     private Node recursiveInsert(Node root, E value) {
-        if (this.root == null) return new Node(value);
+        if (root == null) return new Node(value);
 
         if (value.compareTo(root.value) <= 0)
             root.left = recursiveInsert(root.left, value);
@@ -58,16 +70,21 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
 
     private Node recursiveDelete(Node root, E value) {
         if (root == null) return null;
-
+        Node parent = null;
         if (value == root.value) {
-            // Node to delete found
-            // ... code to delete the node will go here
+            if (root.left == null && root.right == null) {
+                if (parent == null) { new BST();}
+                else (if parent.left.value == root.value);
+            }
+            else if()
         }
         if (value.compareTo(root.value) <= 0) {
+            parent = root;
             root.left = recursiveDelete(root.left, value);
             return root;
         }
         root.right = recursiveDelete(root.right, value);
+        parent = root;
         return root;
     }
 
