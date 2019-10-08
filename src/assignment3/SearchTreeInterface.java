@@ -26,17 +26,17 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
      @precondition
      @postcondition
      **/
-    boolean insert();
+    void insert(E value);
 
     /**
      @precondition
      @postcondition
      **/
-    boolean delete();
+    boolean delete(E value);
 
     /**
      @precondition
      @postcondition
      **/
-    boolean find();
+    boolean find(E value);
 }
