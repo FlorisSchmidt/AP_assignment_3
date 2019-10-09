@@ -26,6 +26,13 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
      @precondition
      @postcondition
      **/
+    void init();
+
+
+    /**
+     @precondition
+     @postcondition
+     **/
     void insert(E value);
 
     /**

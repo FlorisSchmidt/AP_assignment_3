@@ -18,9 +18,12 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     private Node root;
 
     BST() {
-        root = null;
+        init();
     }
 
+    @Override
+    public void init() { root = null;
+    }
 
     @Override
     public Iterator<E> ascendingIterator() {
@@ -47,44 +50,49 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     }
 
 
+
+
     @Override
     public void insert(E value) {
-        root = recursiveInsert(root, value);
+        Node current;
+        current = recursiveInsert(root, value);
+        if (root == null) root = current;
     }
 
-    private Node recursiveInsert(Node root, E value) {
-        if (root == null) return new Node(value);
+    private Node recursiveInsert(Node current, E value) {
+        if (current == null) return new Node(value);
 
-        if (value.compareTo(root.value) <= 0)
-            root.left = recursiveInsert(root.left, value);
-        else if (value.compareTo(root.value) > 0)
-            root.right = recursiveInsert(root.right, value);
-
+        if (value.compareTo(current.value) <= 0)
+            current.left = recursiveInsert(current.left, value);
+        else if (value.compareTo(current.value) > 0)
+            current.right = recursiveInsert(current.right, value);
         return root;
     }
 
     @Override
     public boolean delete(E value) {
-        return false;
+        Node deleted = recursiveDelete(root, value);
+        return deleted != null;
     }
 
-    private Node recursiveDelete(Node root, E value) {
-        if (root == null) return null;
+    private Node recursiveDelete(Node current, E value) {
+        if (current == null) return null;
         Node parent = null;
-        if (value == root.value) {
-            if (root.left == null && root.right == null) {
-                if (parent == null) { new BST();}
-                else (if parent.left.value == root.value);
+        if (value == current.value) {
+            if (current.left == null && current.right == null) {
+                if (parent == null) { BST.init();}
+                else if(parent.left.value == current.value);
             }
             else if()
         }
         if (value.compareTo(root.value) <= 0) {
-            parent = root;
-            root.left = recursiveDelete(root.left, value);
+            parent = current;
+            current.left = recursiveDelete(current.left, value);
             return root;
         }
-        root.right = recursiveDelete(root.right, value);
-        parent = root;
+        parent = current;
+        current.right = recursiveDelete(current.right, value);
+
         return root;
     }
 
@@ -95,13 +103,13 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
         return recursiveSearch(this.root, value);
     }
 
-    private boolean recursiveSearch(Node root, E value) {
-        if (root == null) return false;
-        if (value == root.value) {
+    private boolean recursiveSearch(Node current, E value) {
+        if (current == null) return false;
+        if (value == current.value) {
             return true;
         }
-        if(value.compareTo(root.value) <= 0) return recursiveSearch(root.left, value) ;
-        return recursiveSearch(root.right, value);
+        if(value.compareTo(current.value) <= 0) return recursiveSearch(current.left, value) ;
+        return recursiveSearch(current.right, value);
     }
 }
 
