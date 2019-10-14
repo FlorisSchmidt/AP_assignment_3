@@ -3,7 +3,7 @@ package assignment3;
 import java.lang.StringBuffer;
 import java.lang.Character;
 
-public class Identifier implements IdentifierInterface {
+public class Identifier implements IdentifierInterface, Comparable<Identifier> {
 
     private StringBuffer sb;
     private boolean addWasCalled;
@@ -62,5 +62,10 @@ public class Identifier implements IdentifierInterface {
     @Override
     public boolean equals(Identifier comparand) {
         return this.get().equals(comparand.get());
+    }
+
+    @Override
+    public int compareTo(Identifier o) {
+        return this.get().compareTo(o.get());
     }
 }
