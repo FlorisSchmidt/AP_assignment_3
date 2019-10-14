@@ -1,4 +1,6 @@
 package assignment3;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Main {
 
@@ -8,13 +10,16 @@ public class Main {
 
     private void start() {
         BST<Integer> bst = new BST<>();
-        Integer x = 5;
-        Integer y = 6;
-        Integer z = 7;
-        bst.insert(x);
-        bst.insert(y);
-        bst.insert(z);
-        bst.find(4);
-        int k = 5;
+        int[] list = {234, 236, 6748, 13, 87541, 235, 36, 12, 365, 3, 436};
+        for (int value : list) {
+            bst.insert(new Integer(value));
+        }
+        boolean x = bst.find(new Integer(3));
+        boolean y = bst.find(new Integer(8 ));
+        bst.delete(new Integer(236));
+        boolean z = false;
+        Iterator<Integer> hoi;
+        hoi = bst.descendingIterator();
+        int k = 2;
     }
 }
