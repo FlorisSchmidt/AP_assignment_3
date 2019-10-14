@@ -31,14 +31,14 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     @Override
     public Iterator<E> ascendingIterator() {
         ArrayList<E> iterator = new ArrayList<E>();
-        ascendingTraverse(this.root, iterator);
+        ascendingTraverse(root, iterator);
         return iterator.iterator();
     }
 
     @Override
     public Iterator<E> descendingIterator() {
         ArrayList<E> iterator = new ArrayList<E>();
-        descendingTraverse(this.root, iterator);
+        descendingTraverse(root, iterator);
         return iterator.iterator();
     }
 
@@ -49,7 +49,6 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     private void ascendingTraverse(Node root, ArrayList<E> iterator) {
         if (root != null) {
             if(root.left != null) ascendingTraverse(root.left, iterator);
-            System.out.println(root.value);
             if(root.right != null) ascendingTraverse(root.right, iterator);
         }
         assert root != null;
@@ -59,14 +58,11 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     private void descendingTraverse(Node root, ArrayList<E> iterator) {
         if (root != null) {
             if(root.right != null) descendingTraverse(root.right, iterator);
-            System.out.println(root.value);
             if(root.left != null) descendingTraverse(root.left, iterator);
         }
         assert root != null;
         iterator.add(root.value);
     }
-
-
 
     @Override
     public void insert(E value) {
@@ -215,7 +211,6 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
     public boolean find(E value) {
         Node parent = findParent(value);
         return findChild(parent, value) != null;
-
     }
 
 }
