@@ -1,25 +1,107 @@
 package assignment3;
-import java.util.ArrayList;
+
 import java.util.Iterator;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
 
-    public static void main(String[] args) {
-        new Main().start();
+    private void eval(String input){
+        Scanner s = new Scanner(input);
+        s.useDelimiter("");
+        BST<Identifier> bst = new BST<>();
+
+        Iterator<Identifier> result = parseOptions(s,bst);
+        while(result.hasNext()){
+            System.out.println(result.next().get());
+        }
     }
 
-    private void start() {
-        BST<Integer> bst = new BST<>();
-        int[] list = {234, 236, 6748, 13, 87541, 235, 36, 12, 365, 3, 436};
-        for (int value : list) {
-            bst.insert(new Integer(value));
+    private Iterator parseOptions(Scanner s, BST bst){
+        skipSpaces(s);
+        if(nextCharIs(s,'-')){
+            nextChar(s);
+            if(nextCharIs(s,'i')){
+                nextChar(s);
+                s = new Scanner(s.nextLine().toLowerCase());
+                s.useDelimiter("");
+                return parseOptions(s,bst);
+            }
+            if (nextCharIs(s,'d')){
+                nextChar(s);
+                parseOptions(s,bst);
+                return bst.descendingIterator();
+            }
         }
-        boolean x = bst.find(new Integer(3));
-        boolean y = bst.find(new Integer(8 ));
-        bst.delete(new Integer(236));
-        boolean z = false;
-        Iterator<Integer> hoi;
-        hoi = bst.descendingIterator();
-        int k = 2;
+
+        return parseFiles(s,bst).ascendingIterator();
+    }
+
+    private BST parseFiles(Scanner s,BST bst){
+        if(nextCharIsLetter(s)){
+            Identifier id = new Identifier();
+            id.add(nextChar(s));
+            parseFile(s,id);
+            checkEvenOrUneven(bst,id);
+            parseFiles(s,bst);
+        } else if (nextCharIsDigit(s)){
+            nextChar(s);
+            parseFiles(s,bst);
+        } else if (s.hasNext()){
+            nextChar(s);
+            parseFiles(s,bst);
+        }
+        return bst;
+    }
+
+    private void checkEvenOrUneven(BST bst, Identifier id){
+        if(bst.find(id)){
+            bst.delete(id);
+        } else {
+            bst.insert(id);
+        }
+    }
+
+    private Identifier parseFile(Scanner s, Identifier id){
+        if(nextCharIsDigit(s) || nextCharIsLetter(s)){
+            id.add(nextChar(s));
+            parseFile(s,id);
+        }
+        return id;
+    }
+
+    private void start(String[] args) {
+        StringBuffer sb = new StringBuffer();
+        for(String line : args){
+            sb.append(" ").append(line);
+        }
+        eval(sb.toString());
+    }
+
+    private char nextChar(Scanner in) {
+        return in.next().charAt(0);
+    }
+
+    private boolean nextCharIs(Scanner in,char c) {
+        return in.hasNext(Pattern.quote(c + ""));
+    }
+
+    private boolean nextCharIsDigit(Scanner in) {
+        return in.hasNext("[0-9]");
+    }
+
+    private boolean nextCharIsLetter(Scanner in) {
+        return in.hasNext("[a-zA-Z]");
+    }
+
+    private void skipSpaces(Scanner s){
+        while(nextCharIs(s, ' ')) {
+            nextChar(s);
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] testargs = new String[] {"FOUR FOUR", ""};
+        new Main().start(testargs);
     }
 }
