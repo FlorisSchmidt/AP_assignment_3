@@ -46,22 +46,20 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
         return size;
     }
 
-    private void ascendingTraverse(Node root, ArrayList<E> iterator) {
-        if (root != null) {
-            if(root.left != null) ascendingTraverse(root.left, iterator);
-            if(root.right != null) ascendingTraverse(root.right, iterator);
+    private void ascendingTraverse(Node current, ArrayList<E> iterator) {
+        if (current != null) {
+            if(current.left != null) ascendingTraverse(current.left, iterator);
+            iterator.add(current.value);
+            if(current.right != null) ascendingTraverse(current.right, iterator);
         }
-        assert root != null;
-        iterator.add(root.value);
     }
 
-    private void descendingTraverse(Node root, ArrayList<E> iterator) {
-        if (root != null) {
-            if(root.right != null) descendingTraverse(root.right, iterator);
-            if(root.left != null) descendingTraverse(root.left, iterator);
+    private void descendingTraverse(Node current, ArrayList<E> iterator) {
+        if (current != null) {
+            if(current.right != null) descendingTraverse(current.right, iterator);
+            iterator.add(current.value);
+            if(current.left != null) descendingTraverse(current.left, iterator);
         }
-        assert root != null;
-        iterator.add(root.value);
     }
 
     @Override
