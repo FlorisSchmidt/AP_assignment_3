@@ -81,43 +81,47 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
 
     @Override
     public boolean delete(E value) {
-        size--;
         if (root == null) return false;
-
-        // case node to be deleted is root
+        Node parent;
+        Node target;
         if (root.value.compareTo(value) == 0) {
-            switch (numberOfChildren(root)) {
-                case 0:
-                    init();
-                    return true;
-                case 1:
-                    if (root.left != null) root = root.left;
-                    else root = root.right;
-                    return true;
-                case 2:
-                    return deleteParentOfTwo(root);
-            }
+            parent = target = root;
         }
-        Node parent = findParent(value);
-        Node target = findChild(parent, value);
-
+        else {
+           parent = findParent(value);
+           target = findChild(parent, value);
+        }
+        if(parent == null) return false;
         switch (numberOfChildren(target)) {
             case 0:
-                if (leftRelation(parent, target)) {
-                    parent.left = null;
-                } else parent.right = null;
-                return true;
+                return deleteLeaf(parent, target);
             case 1:
                 return deleteParentOfOne(parent, target);
-
             case 2:
                 return deleteParentOfTwo(target);
         }
         return false;
     }
 
+    private boolean deleteLeaf(Node parent, Node target) {
+        if(target == root) {
+            init();
+            return true;
+        }
+        else if (leftRelation(parent, target)) {
+            parent.left = null;
+        } else parent.right = null;
+        size--;
+        return true;
+    }
 
     private boolean deleteParentOfOne(Node parent, Node target) {
+        if (target == root) {
+            if (root.left != null) root = root.left;
+            else root = root.right;
+            size--;
+            return true;
+        }
         boolean leftRelation = leftRelation(parent, target);
         if (leftRelation) {
             if (target.left != null) {
@@ -130,6 +134,7 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
             }
             parent.right = target.right;
         }
+        size--;
         return true;
     }
 
@@ -142,6 +147,7 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
             if (leftRelation(parent, successor)) {
                 parent.left = null;
             } else parent.right = null;
+            size--;
             return true;
         }
 
