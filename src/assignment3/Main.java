@@ -6,18 +6,31 @@ import java.util.regex.Pattern;
 
 public class Main {
 
+    private boolean increasing;
+
     private void eval(String input){
         Scanner s = new Scanner(input);
         s.useDelimiter("");
-        BST<Identifier> bst = new BST<>();
+        BST bst = new BST<>();
+        increasing = true;
 
-        Iterator<Identifier> result = parseOptions(s,bst);
+        bst = parseOptions(s,bst);
+        Iterator<Identifier> result = sort(bst);
+
         while(result.hasNext()){
             System.out.println(result.next().get());
         }
     }
 
-    private Iterator parseOptions(Scanner s, BST bst){
+    private Iterator sort(BST bst){
+        if(increasing){
+            return bst.ascendingIterator();
+        } else {
+            return bst.descendingIterator();
+        }
+    }
+
+    private BST parseOptions(Scanner s, BST bst){
         skipSpaces(s);
         if(nextCharIs(s,'-')){
             nextChar(s);
@@ -29,12 +42,12 @@ public class Main {
             }
             if (nextCharIs(s,'d')){
                 nextChar(s);
+                increasing = false;
                 parseOptions(s,bst);
-                return bst.descendingIterator();
+                return bst;
             }
         }
-
-        return parseFiles(s,bst).ascendingIterator();
+        return parseFiles(s,bst);
     }
 
     private BST parseFiles(Scanner s,BST bst){
@@ -101,7 +114,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String[] testargs = new String[] {"FOUR FOUR", ""};
-        new Main().start(testargs);
+        new Main().start(args);
     }
 }
