@@ -207,6 +207,7 @@ public class BST<E extends Comparable<E>> implements SearchTreeInterface<E> {
 
     @Override
     public boolean find(E value) {
+        if(root==null) return false;
         if(root.value.compareTo(value) == 0) return true;
         Node parent = findParent(value);
         return findChild(parent, value) != null;
