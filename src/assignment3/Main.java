@@ -1,7 +1,5 @@
 package assignment3;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.NoSuchFileException;
@@ -19,6 +17,7 @@ public class Main {
         allowCaps = true;
 
         StringBuffer sb = new StringBuffer();
+
         for(String line : args){
             sb.append(" ").append(line);
         }
@@ -28,8 +27,9 @@ public class Main {
     private void eval(String input){
         Scanner inputScanner = new Scanner(input);
         inputScanner.useDelimiter("");
+        parseOptions(inputScanner);
 
-        Scanner mergedFiles = getMergedFiles(parseOptions(inputScanner));
+        Scanner mergedFiles = getMergedFiles(inputScanner);
 
         mergedFiles.useDelimiter("");
         BST bst = new BST<>();
@@ -74,14 +74,11 @@ public class Main {
     }
 
     private Iterator sort(BST bst){
-        if(increasing){
-            return bst.ascendingIterator();
-        } else {
-            return bst.descendingIterator();
-        }
+        if(increasing){ return bst.ascendingIterator();
+        } return bst.descendingIterator();
     }
 
-    private Scanner parseOptions(Scanner s){
+    private void parseOptions(Scanner s){
         nextChar(s);
         skipSpaces(s);
         if(nextCharIs(s,'-')){
@@ -89,15 +86,14 @@ public class Main {
             if(nextCharIs(s,'i')){
                 nextChar(s);
                 allowCaps = false;
-                return parseOptions(s);
+                parseOptions(s);
             }
             if (nextCharIs(s,'d')){
                 nextChar(s);
                 increasing = false;
-                return parseOptions(s);
+                parseOptions(s);
             }
         }
-        return s;
     }
 
     private BST parseFiles(Scanner s,BST bst){
@@ -107,10 +103,7 @@ public class Main {
             parseFile(s,id);
             checkEven(bst,id);
             parseFiles(s,bst);
-        } else if (nextCharIsDigit(s)){
-            nextChar(s);
-            parseFiles(s,bst);
-        } else if (s.hasNext()){
+        } else if (nextCharIsDigit(s) || s.hasNext()){
             nextChar(s);
             parseFiles(s,bst);
         }
@@ -118,11 +111,7 @@ public class Main {
     }
 
     private void checkEven(BST bst, Identifier id){
-        if(bst.find(id)){
-            bst.delete(id);
-        } else {
-            bst.insert(id);
-        }
+        if(!bst.delete(id)){ bst.insert(id); }
     }
 
     private void parseFile(Scanner s, Identifier id){
