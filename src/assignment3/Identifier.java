@@ -16,7 +16,7 @@ public class Identifier implements IdentifierInterface, Comparable<Identifier> {
     Identifier(Identifier src){
         sb = new StringBuffer();
         addWasCalled = src.addWasCalled;
-        sb.append(src.get());
+        sb.append(src.value());
 
     }
 
@@ -50,7 +50,7 @@ public class Identifier implements IdentifierInterface, Comparable<Identifier> {
     }
 
     @Override
-    public String get() {
+    public String value() {
         return sb.toString();
     }
 
@@ -61,11 +61,11 @@ public class Identifier implements IdentifierInterface, Comparable<Identifier> {
 
     @Override
     public boolean equals(Identifier comparand) {
-        return this.get().equals(comparand.get());
+        return value().equals(comparand.value());
     }
 
     @Override
     public int compareTo(Identifier o) {
-        return this.get().compareTo(o.get());
+        return value().compareTo(o.value());
     }
 }
