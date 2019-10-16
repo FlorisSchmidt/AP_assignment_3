@@ -1,54 +1,66 @@
 package assignment3;
 
 public interface IdentifierInterface {
-    /*
-    Elements: characters of type char saved in a stingbuffer
-    Structure: Linear
-    Domain: Only alphanumeric characters, identifier begins with a letter,
-            identifier has length of at least 1 character
 
-     constructors
+    /** @elements
+     *    Characters of type char
+     *  @structure
+     *    linear
+     *  @domain
+     *    Only alphanumeric characters. Identifiers begins with a letter.
+     *    Identifier has a length at least 1 character
+     *  @constructor
+     *    There is a default constructor that creates an identifier containing one character.
+     *  @precondition
+     *    --
+     *  @postcondition
+     *    The new Identifier-object and contains the character 'c'.
+     *
+     **/
 
-        * Identifier(); *
-        PRE  -
-        *   POST -A new Identifier has been made and contains the character x *
-        *
-        Identifier
-        PRE  -  *
-        POST - A new Identifier-object has been made and contains a copy of src.
 
-    */
-
+    /** @precondition
+     *    --
+     *  @postcondition
+     *    Identifier-POST contains one character.
+     **/
     void init();
-    /*
-     * PRE -
-     * POST - Identifier has one char
-     */
 
+
+    /** @precondition
+     *   --
+     *  @postcondition
+     *    If char chores to domain requirements it is present in Identifier-POST
+     *    @return 	true: element has been added.
+     *    			false: element has not been added.
+     **/
     boolean add(char c);
-    /*
-     * PRE -
-     * POST - true: the char falls inside the domain and is added
-     * 		  false: the char falls outside of the domain and isn't added
-     */
 
-    String get();
-    /*
-     * PRE -
-     * POST - The string that makes up the identifier has been returned
-     */
+    /** @precondition
+     *  --
+     *  @postcondition
+     *  @return a String-object with the concatenation of the added chars.
+     **/
+    String value();
 
+
+    /** @precondition
+     *    --
+     *  @postcondition
+     *    @return An integer representing the number of characters in the identifier.
+     **/
     int size();
-    /*
-     * PRE -
-     * POST - the size of the Identifier is returned
-     */
 
+
+    /** @precondition
+     *    --
+     *  @postcondition
+     *  @return true: 	The identifier contains the same chars in the same order as the identifier
+     *  			  	passed as argument.
+     *    		false: 	The identifier contains the same chars in the same order as the identifier
+     * 					passed as argument.
+     **/
     boolean equals(Identifier comparand);
-    /*
-     * PRE - the identifiers need to have the same size
-     * POST - true: The identifier is the same as the identifier passed
-     * 		  false: The identifier is not the same as the identifier passed
-     */
+
 
 }

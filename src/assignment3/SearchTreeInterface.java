@@ -6,11 +6,10 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
     /** @elements
      *  All elements of type E extending the comparable class
      *  @structure
-     *    Left subtree of a node contains only nodes with values lesser than the node's key.
-     *    Right subtree of a node contains only nodes with values greater than the node's key.
+     *    Binary tree
      *  @domain
-     *    Only alphanumeric characters. Identifiers begins with a letter.
-     *    Identifier has a length at least 1 character
+     *   Left subtree of a node contains only nodes with values lesser than the node's key.
+     *   Right subtree of a node contains only nodes with values greater than the node's key.
      *  @constructor
      *    There is a default constructor that creates an empty tree
      *  @precondition
@@ -35,7 +34,7 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
     /** @precondition
      * --
      * @postcondition
-     *The data stored in the binary search tree was iterated in
+     * The data stored in the binary search tree was iterated in
      * monotonically non-increasing order and was added in this
      * order to an object of the type Iterator<E>.
      * This object of the type Iterator<E>was subsequently
@@ -60,7 +59,7 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
     void insert(E value);
 
     /** @precondition
-     * The SearchTree is not empty.
+     *
      * @postcondition
      * SearchTree-POST does not contain the value.
      * @return  true: SearchTree-PRE contains the value passed as argument and has now been deleted.
@@ -69,9 +68,9 @@ public interface SearchTreeInterface<E extends Comparable<E>> {
     boolean delete(E value);
 
     /** @precondition
-     * The SearchTree is not empty.
+     * --
      * @postcondition
-     * @return  true: SearchTree contains the value passed as argument.
+     * @return  true:  SearchTree contains the value passed as argument.
      *          false: SearchTree does not contain the value passed as argument.
      **/
     boolean find(E value);
