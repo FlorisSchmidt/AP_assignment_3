@@ -1,5 +1,10 @@
 package assignment3;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -7,19 +12,65 @@ import java.util.regex.Pattern;
 public class Main {
 
     private boolean increasing;
+    private boolean allowCaps;
+
+    private void start(String[] args) {
+        increasing = true;
+        allowCaps = true;
+
+        StringBuffer sb = new StringBuffer();
+        for(String line : args){
+            sb.append(" ").append(line);
+        }
+        eval(sb.toString());
+    }
 
     private void eval(String input){
-        Scanner s = new Scanner(input);
-        s.useDelimiter("");
+        Scanner inputScanner = new Scanner(input);
+        inputScanner.useDelimiter("");
+
+        Scanner mergedFiles = getMergedFiles(parseOptions(inputScanner));
+
+        mergedFiles.useDelimiter("");
         BST bst = new BST<>();
-        increasing = true;
 
-        bst = parseOptions(s,bst);
-        Iterator<Identifier> result = sort(bst);
-
-        while(result.hasNext()){
-            System.out.println(result.next().get());
+        Iterator<Identifier> iterator = sort(parseFiles(mergedFiles, bst));
+        while(iterator.hasNext()){
+            System.out.println(iterator.next().value());
         }
+    }
+
+    private Scanner getMergedFiles(Scanner paths){
+        paths.useDelimiter(" ");
+        StringBuffer sb = new StringBuffer();
+        while(paths.hasNext()){
+            sb.append(openFile(paths.next())).append(" ");
+        }
+        return new Scanner(parseCase(sb.toString()));
+    }
+
+    private String openFile(String path){
+        try {
+            File file = new File(path);
+            if(!file.isFile()){
+                throw new NoSuchFileException(path);
+            }
+            return fileToString(file);
+        } catch (NoSuchFileException | FileNotFoundException e){
+            System.out.println("No file:"+e.getMessage());
+            System.exit(1);
+        }
+        return null;
+    }
+
+    private String fileToString(File file) throws FileNotFoundException {
+        StringBuffer sb = new StringBuffer();
+        Scanner fileScanner = new Scanner(file);
+        fileScanner.useDelimiter("");
+        while(fileScanner.hasNext()){
+            sb.append(nextChar(fileScanner));
+        }
+        return sb.toString();
     }
 
     private Iterator sort(BST bst){
@@ -30,24 +81,23 @@ public class Main {
         }
     }
 
-    private BST parseOptions(Scanner s, BST bst){
+    private Scanner parseOptions(Scanner s){
+        nextChar(s);
         skipSpaces(s);
         if(nextCharIs(s,'-')){
             nextChar(s);
             if(nextCharIs(s,'i')){
                 nextChar(s);
-                s = new Scanner(s.nextLine().toLowerCase());
-                s.useDelimiter("");
-                return parseOptions(s,bst);
+                allowCaps = false;
+                return parseOptions(s);
             }
             if (nextCharIs(s,'d')){
                 nextChar(s);
                 increasing = false;
-                parseOptions(s,bst);
-                return bst;
+                return parseOptions(s);
             }
         }
-        return parseFiles(s,bst);
+        return s;
     }
 
     private BST parseFiles(Scanner s,BST bst){
@@ -55,7 +105,7 @@ public class Main {
             Identifier id = new Identifier();
             id.add(nextChar(s));
             parseFile(s,id);
-            checkEvenOrUneven(bst,id);
+            checkEven(bst,id);
             parseFiles(s,bst);
         } else if (nextCharIsDigit(s)){
             nextChar(s);
@@ -67,7 +117,7 @@ public class Main {
         return bst;
     }
 
-    private void checkEvenOrUneven(BST bst, Identifier id){
+    private void checkEven(BST bst, Identifier id){
         if(bst.find(id)){
             bst.delete(id);
         } else {
@@ -75,20 +125,11 @@ public class Main {
         }
     }
 
-    private Identifier parseFile(Scanner s, Identifier id){
+    private void parseFile(Scanner s, Identifier id){
         if(nextCharIsDigit(s) || nextCharIsLetter(s)){
             id.add(nextChar(s));
             parseFile(s,id);
         }
-        return id;
-    }
-
-    private void start(String[] args) {
-        StringBuffer sb = new StringBuffer();
-        for(String line : args){
-            sb.append(" ").append(line);
-        }
-        eval(sb.toString());
     }
 
     private char nextChar(Scanner in) {
@@ -111,6 +152,11 @@ public class Main {
         while(nextCharIs(s, ' ')) {
             nextChar(s);
         }
+    }
+
+    private String parseCase(String s){
+        if(!allowCaps){ return s.toLowerCase();
+        } return s;
     }
 
     public static void main(String[] args) {
